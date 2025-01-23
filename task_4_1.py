@@ -16,10 +16,10 @@ def get_file_name() -> Path:
     The function returns the path to the data file from the command line
 
     Input:
-    * None
+        * None
 
     Output:
-    * the path to the data file (type: string)
+        * the path to the data file (type: string)
     '''
 
     try:
@@ -44,10 +44,10 @@ def load_data(path: Path) -> list[str]:
     The function loads data from a file
 
     Input:
-    * the path to the data file (type: string)
+        * the path to the data file (type: string)
 
     Output:
-    * the list of strings (type: list[str])
+        * the list of strings (type: list[str])
     '''
 
     try:
@@ -63,10 +63,10 @@ def clean_data(salary_data: list[str]) -> list[float]:
     The function selects numeric values from a list of strings
 
     Input:
-    * the list of strings (type: list[str])
+        * the list of strings (type: list[str])
 
     Output:
-    * the list of numbers (type: list[float])
+        * the list of numbers (type: list[float])
     '''
 
     clean_list = []
@@ -89,9 +89,10 @@ def total_salary(path: Path) -> tuple[float, float]:
     The function takes the path to the data file and returns the sum and average of the numeric data
 
     Input:
-    * the path to the data file (type: str)
+        * the path to the data file (type: str)
 
     Output:
+        * a tuple of floating point numbers (type: tuple[float, float])
     '''
 
     if not path:
