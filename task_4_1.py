@@ -100,7 +100,7 @@ def total_salary(path: Path) -> tuple[float, float]:
     
     # Load and clean the salary data
     salary_data = clean_data(load_data(path))
-    # print(salary_data)
+
     if not salary_data:
         print("Файл не містить числових даних.")
         return 0, 0
