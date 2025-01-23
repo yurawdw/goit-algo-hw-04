@@ -6,7 +6,7 @@ from re import search
 from pathlib import Path
 
 # variables
-warn_msg = f"Файл не знайдено або шлях некоректний (Наприклад: {Path(sys.argv[0]).name} /path-to-file/example.txt)"
+warn_msg = f"Файл не знайдено або шлях некоректний (Наприклад: {Path(sys.argv[0]).name} /path-to-file/data_file.txt)"
 
 error_msg = f"Помилка при завантаженні файлу!"
 
@@ -24,7 +24,8 @@ def get_file_name() -> Path:
 
     try:
         # Get the file name from command line arguments
-        file_name = Path(sys.argv[1])
+        # file_name = Path(sys.argv[1])
+        file_name = Path('./cats_info.txt')
     except IndexError:
         # Inform the user if the file name is missing
         print(warn_msg)
@@ -52,7 +53,7 @@ def load_data(path: Path) -> list[str]:
 
     try:
         # Open the file and read all lines
-        with path.open("r", encoding='utf-8') as fh:
+        with open(path, "r", encoding='utf-8') as fh:
             return fh.readlines()
     except Exception as e:
         print(error_msg, e, sep="  ")
@@ -72,12 +73,12 @@ def clean_data(animal_data: str) -> dict:
     result = animal_data.split(',')
     
     if not animal_data or result == animal_data or len(result) < 3:
-        print("Data not found. Exit...")
+        print("Дані не знайдено...")
         return None
 
-    animal_dict = {"ID" : result[0].strip(), \
-                   "Name" : result[1].strip(), \
-                   "Age" : int(result[2].strip())}
+    animal_dict = {"id" : result[0].strip(), \
+                   "name" : result[1].strip(), \
+                   "age" : int(result[2].strip())}
 
     return animal_dict
 
@@ -91,7 +92,9 @@ def get_cats_info(path: str) -> list[dict]:
         return None
 
     info_list = []
-    info_list.append(clean_data(el) for el in load_data(path))
+    for el in load_data(path):
+        el = clean_data(el)
+        info_list.append(el)
 
     return info_list
 
@@ -102,13 +105,13 @@ def main():
     # Retrieve the file path from command line arguments
     file_path = get_file_name()
     if not file_path:
-        print("Data file not found. Exit...")
+        print("Дані не знайдено...")
         # Exit if no valid file path is provided
         return
 
     
-    cats_info = get_cats_info("path/to/cats_file.txt")
-    print(cats_info)pass
+    cats_info = get_cats_info(file_path)
+    print(cats_info)
 
 if __name__ == "__main__":
     main()
