@@ -55,7 +55,7 @@ def load_data(path: Path) -> list[str]:
         with path.open("r", encoding='utf-8') as fh:
             return fh.readlines()
     except Exception as e:
-        print(error_msg)
+        print(error_msg, e, sep="  ")
         return []
 
 def clean_data(salary_data: list[str]) -> list[float]:
