@@ -4,7 +4,7 @@ Sitarama Raju,1000
 Max Borisyuk,2000
 Rama Brahma,1000
 Kate Borisenko,2000
-Sitarama Raju, 3750.50
+Sitarama Raju, -3750.50
     
 Jack Liss,2500,50
 Mike Chick,"   "

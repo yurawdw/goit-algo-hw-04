@@ -76,11 +76,11 @@ def clean_data(salary_data: list[str]) -> list[float]:
             match = search(r'-?\d+(\.\d+)?', temp)
             if match:
                 try:
-                    value = float(match.group())  # Convert to float
+                    value = (float(match.group()) if float(match.group()) >= 0 else 0)  # Convert to float
                     clean_list.append(value)
                 except ValueError:
                     print(f"Неможливо перетворити значення на число: {match.group()}")
- 
+
     return clean_list
 
 
