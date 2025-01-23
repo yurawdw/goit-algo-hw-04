@@ -1,8 +1,12 @@
-Alex Korp,3000
-Nikita Borisenko,2000
-Sitarama Raju,1000
+Alex Korp,
+Nikita Borisenko,
+Sitarama Raju,
+Max Borisyuk,
+Rama Brahma,
+Kate Borisenko,
+Sitarama Raju, 
     
-Jack Liss,2500,50
+Jack Liss,
 Mike Chick,"   "
-Svitlana Chyzh,"0600"
-Sasha Black,00100
+Svitlana Chyzh,""
+Sasha Black,
