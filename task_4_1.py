@@ -5,108 +5,73 @@ import sys
 from re import search
 from pathlib import Path
 
-# variables
-warn_msg = f"Файл не знайдено або шлях некоректний (Наприклад: {Path(sys.argv[0]).name} /path-to-file/example.txt)"
 
-error_msg = f"Помилка при завантаженні файлу!"
-
-# function definitions
-def get_file_name() -> Path:
+def load_data(path) -> list[str]:
     '''
-    The function returns the path to the data file from the command line
+    Load data from the specified file.
 
     Input:
-        * None
+        path (str): Path to the data file 
 
     Output:
-        * the path to the data file (type: string)
+        list of str: Data from file
     '''
 
     try:
-        # Get the file name from command line arguments
-        file_name = Path(sys.argv[1])
-    except IndexError:
-        # Inform the user if the file name is missing
-        print(warn_msg)
-        return None
-
-    # Check if the file exists and is a file
-    if file_name.exists() and file_name.is_file():
-        return file_name
-    else:
-        # Inform the user if the provided path is invalid
-        print(warn_msg)
-    return None
-
-
-def load_data(path: Path) -> list[str]:
-    '''
-    The function loads data from a file
-
-    Input:
-        * the path to the data file (type: string)
-
-    Output:
-        * the list of strings (type: list[str])
-    '''
-
-    try:
-        # Open the file and read all lines
-        with path.open("r", encoding='utf-8') as fh:
+        with open(path, "r", encoding='utf-8') as fh:
             return fh.readlines()
+    except FileNotFoundError:
+        print(f"File not found: {path}")
     except Exception as e:
-        print(error_msg, e, sep="  ")
-        return []
+        print(f"Error while reading the file: {e}")
+    
+    return []
 
 def clean_data(salary_data: list[str]) -> list[float]:
     '''
-    The function selects numeric values from a list of strings
-
+    Parse string data into numeric values
+    
     Input:
-        * the list of strings (type: list[str])
+        list of str: List of data with/without numeric values
 
     Output:
-        * the list of numbers (type: list[float])
+        list of float: List of numeric values
     '''
 
     clean_list = []
+
     for temp in salary_data:
-        temp = temp.strip() # Remove leading/trailing whitespace
+        temp = temp.strip()
         if temp:
             match = search(r'-?\d+(\.\d+)?', temp)
             if match:
                 try:
-                    value = (float(match.group()) if float(match.group()) >= 0 else 0)  # Convert to float
+                    value = (float(match.group()) if float(match.group()) >= 0 else 0)
                     clean_list.append(value)
                 except ValueError:
-                    print(f"Неможливо перетворити значення на число: {match.group()}")
-
+                    print(f"Unable to convert a value to a number: {match.group()}")
+            else:
+                print(f"Incorrect data in line: '{temp}'. Skipped.")
     return clean_list
 
 
-def total_salary(path: Path) -> tuple[float, float]:
+def total_salary(path) -> tuple[float, float]:
     '''
-    The function takes the path to the data file and returns the sum and average of the numeric data
+    Gets the list of employees' salaries from the specified file. Returns the total value of the payroll and the average salary 
 
     Input:
-        * the path to the data file (type: str)
+        path (str): Path to the file.
 
     Output:
-        * a tuple of floating point numbers (type: tuple[float, float])
+        tuple[float, float]: Tuple with two float values
     '''
-
-    if not path:
-        # Return 0 if the path is not valid
-        return 0, 0
     
-    # Load and clean the salary data
     salary_data = clean_data(load_data(path))
 
     if not salary_data:
-        print("Файл не містить числових даних.")
+        print("The file does not contain any numeric data.")
         return 0, 0
 
-    # Calculate total and average values
     total = sum(salary_data)
     average = total / len(salary_data)
 
@@ -114,21 +79,14 @@ def total_salary(path: Path) -> tuple[float, float]:
 
 
 def main() -> None:
-    '''
-    Main function to calculate and display the total and average salary.
-
-    Input:
-        * None
-
-    Output:
-        * None
-    '''
-
-    # Retrieve the file path from command line arguments
-    file_path = get_file_name()
-    if not file_path:
-        # Exit if no valid file path is provided
+    """
+    Main function to execute the script.
+    """
+    if len(sys.argv) < 2:
+        print(f"Usage: python3 {Path(sys.argv[0]).name} <path-to-file>")
         return
+
+    file_path = sys.argv[1]
     
     # Calculate the total and average salary
     total, average = total_salary(file_path)
