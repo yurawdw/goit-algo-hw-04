@@ -41,7 +41,8 @@ def clean_data(salary_data: list[str]) -> list[float]:
     clean_list = []
 
     for temp in salary_data:
-        temp = temp.strip()
+        temp = temp.strip().split(',')
+        temp = temp[1] if len(temp) > 2 else temp[-1]
         if temp:
             match = search(r'-?\d+(\.\d+)?', temp)
             if match:
@@ -82,11 +83,12 @@ def main() -> None:
     """
     Main function to execute the script.
     """
-    if len(sys.argv) < 2:
-        print(f"Usage: python3 {Path(sys.argv[0]).name} <path-to-file>")
-        return
+    # if len(sys.argv) < 2:
+    #     print(f"Usage: python3 {Path(sys.argv[0]).name} <path-to-file>")
+    #     return
 
-    file_path = sys.argv[1]
+    # file_path = sys.argv[1]
+    file_path = "./salary_file.txt"
     
     # Calculate the total and average salary
     total, average = total_salary(file_path)
