@@ -27,6 +27,7 @@ def load_data(path) -> list[str]:
     
     return []
 
+
 def clean_data(salary_data: list[str]) -> list[float]:
     '''
     Parse string data into numeric values
@@ -83,12 +84,11 @@ def main() -> None:
     """
     Main function to execute the script.
     """
-    # if len(sys.argv) < 2:
-    #     print(f"Usage: python3 {Path(sys.argv[0]).name} <path-to-file>")
-    #     return
+    if len(sys.argv) < 2:
+        print(f"Usage: python3 {Path(sys.argv[0]).name} <path-to-file>")
+        return
 
-    # file_path = sys.argv[1]
-    file_path = "./salary_file.txt"
+    file_path = sys.argv[1]
     
     # Calculate the total and average salary
     total, average = total_salary(file_path)
