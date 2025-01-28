@@ -1,117 +1,89 @@
-'''
-Homework for the module 4. Task 2
-'''
 import sys
-from re import search
 from pathlib import Path
 
-# variables
-warn_msg = f"Файл не знайдено або шлях некоректний (Наприклад: {Path(sys.argv[0]).name} /path-to-file/data_file.txt)"
+def load_data(path):
+    """
+    Load data from the specified file.
 
-error_msg = f"Помилка при завантаженні файлу!"
+    Args:
+        path (str): Path to the file.
 
-# function definitions
-def get_file_name() -> Path:
-    '''
-    The function returns the path to the data file from the command line
-
-    Input:
-    * None
-
-    Output:
-    * the path to the data file (type: string)
-    '''
-
+    Returns:
+        list: List of lines read from the file.
+    """
     try:
-        # Get the file name from command line arguments
-        # file_name = Path(sys.argv[1])
-        file_name = Path('./cats_info.txt')
-    except IndexError:
-        # Inform the user if the file name is missing
-        print(warn_msg)
-        return None
+        with open(path, "r", encoding="utf-8") as file:
+            return file.readlines()
+    except FileNotFoundError:
+        print(f"File not found: {path}")
+    except Exception as e:
+        print(f"Error while reading the file: {e}")
+    return []
 
-    # Check if the file exists and is a file
-    if file_name.exists() and file_name.is_file():
-        return file_name
-    else:
-        # Inform the user if the provided path is invalid
-        print(warn_msg)
+def clean_data(animal_data):
+    """
+    Parse a single line of animal data into a dictionary.
+
+    Args:
+        animal_data (str): A line containing cat information.
+
+    Returns:
+        dict or None: A dictionary with cat information, or None if invalid.
+    """
+    try:
+        parts = animal_data.strip().split(",")
+        if len(parts) != 3:
+            raise ValueError("Invalid data format")
+
+        cat_id, name, age = parts
+        return {
+            "id": cat_id.strip(),
+            "name": name.strip(),
+            "age": int(age.strip()),
+        }
+    except ValueError as e:
+        print(f"Skipping invalid data: {animal_data.strip()} ({e})")
     return None
 
+def get_cats_info(path):
+    """
+    Get a list of cat information from the specified file.
 
-def load_data(path: Path) -> list[str]:
-    '''
-    The function loads data from a file
+    Args:
+        path (str): Path to the file.
 
-    Input:
-    * the path to the data file (type: string)
+    Returns:
+        list: List of dictionaries containing cat information.
+    """
+    data = load_data(path)
+    cats_info = []
+    seen_ids = set()
 
-    Output:
-    * the list of strings (type: list[str])
-    '''
+    for line in data:
+        cat = clean_data(line)
+        if cat and cat["id"] not in seen_ids:
+            cats_info.append(cat)
+            seen_ids.add(cat["id"])
 
-    try:
-        # Open the file and read all lines
-        with open(path, "r", encoding='utf-8') as fh:
-            return fh.readlines()
-    except Exception as e:
-        print(error_msg, e, sep="  ")
-        return []
-
-def clean_data(animal_data: str) -> dict:
-    '''
-    The function receives string values, splits them, and creates a dictionary
-    
-    Input:
-    * the string (type: str)
-
-    Output:
-    * the dictionary (type: dict["ID" : str, "Name" : str, "Age" : int])
-    '''
-
-    result = animal_data.split(',')
-    
-    if not animal_data or result == animal_data or len(result) < 3:
-        print("Дані не знайдено...")
-        return None
-
-    animal_dict = {"id" : result[0].strip(), \
-                   "name" : result[1].strip(), \
-                   "age" : int(result[2].strip())}
-
-    return animal_dict
-
-def get_cats_info(path: str) -> list[dict]:
-    '''
-    
-    '''
-
-    if not path:
-        # Return 0 if the path is not valid
-        return None
-
-    info_list = []
-    for el in load_data(path):
-        el = clean_data(el)
-        info_list.append(el)
-
-    return info_list
+    return cats_info
 
 def main():
-    '''
-    '''
-    
-    # Retrieve the file path from command line arguments
-    file_path = get_file_name()
-    if not file_path:
-        print("Дані не знайдено...")
-        # Exit if no valid file path is provided
+    """
+    Main function to execute the script.
+    """
+    if len(sys.argv) < 2:
+        print(f"Usage: python3 {Path(sys.argv[0]).name} <path-to-file-with-cat-info>")
         return
 
-    
+    file_path = sys.argv[1]
+
     cats_info = get_cats_info(file_path)
-    print(cats_info)
+    if cats_info:
+        print("Cat information:")
+        for cat in cats_info:
+            print(cat)
+    else:
+        print("No valid cat information found.")
 
 if __name__ == "__main__":
     main()
