@@ -39,7 +39,7 @@ def clean_data(animal_data):
         return {
             "id": cat_id.strip(),
             "name": name.strip(),
-            "age": int(age.strip()),
+            "age": age.strip(),
         }
     except ValueError as e:
         print(f"Skipping invalid data: {animal_data.strip()} ({e})")
