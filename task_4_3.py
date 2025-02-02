@@ -1,5 +1,6 @@
 '''
 The script displays the structure of the directive using pseudo-graphic elements
+version: pre-alfa 0.0.10
 
 '''
 import sys
@@ -41,7 +42,6 @@ def parse_folder(path: Path, level=0, prev_has_sibling=True, show_hidden=False):
     files = [item for item in items if item.is_file()]
 
 
-
     if not files and not folders:
         indent = (decor_map["pipe"] + "  ") * (level - 1 if prev_has_sibling else level - 2)  + ("    " if not prev_has_sibling else "")
     else:
@@ -68,10 +68,10 @@ def main():
     Main function: gets the path to the directory and starts processing.
     """
     if len(sys.argv) < 2:
-        print(f"\nUsage: python3 {Path(sys.argv[0]).name} <path-to-dir> | -a \n")
+        print(f"\nUsage: python3 {Path(sys.argv[0]).name} <path-to-dir> -a\n")
         print(f"option:")
         print(f"\t-a: show all hiden files\n")
-        folder_path = Path('..')
+        folder_path = Path('.')
     else: 
         folder_path = Path(sys.argv[1])
 
@@ -84,6 +84,7 @@ def main():
     
     if folder_path is None or not folder_path.is_dir():
         print(f"\nError: '{folder_path}' is not a valid directory.\n")
+        print(f"\nUsage: python3 {Path(sys.argv[0]).name} <path-to-dir> -a\n")
         return
     
     parse_folder(folder_path, show_hidden=show_hidden)
