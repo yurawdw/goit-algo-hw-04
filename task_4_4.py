@@ -29,7 +29,7 @@ commands:
 \thello : print greetings
 \tadd | ad <name> <phone> : add new contact
 \tchange | ch <name> <phone> : change contact's phone
-\tshow | sh <name> : show phone number of <name>
+\tphone | ph <name> : show phone number of <name>
 \tall | a : show all contacts
 \tremove | rm <name> : remove contact
 \tclear : clear database
@@ -216,7 +216,7 @@ def main():
             print(add_contact(args, contacts))
         elif command in ["change", "ch"]:
             print(change_contact(args, contacts))
-        elif command in ["show", "sh"]:
+        elif command in ["phone", "ph"]:
             print(show_contact(args, contacts))
         elif command in ["all", "a"]:
             print(show_all_contact(contacts))
